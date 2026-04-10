@@ -7,13 +7,16 @@ public class Solicitud {
 	private Long id;
 	private String descripcion;
 	private EstadoSolicitud estado;
+	private Cliente cliente;
 	private Date fechaCreacion;
 	private Date fechaCierre;
+	private Tecnico tecnicoAsignado;
 	
 	public Solicitud() {}
 	
-	public Solicitud(Long id, String descripcion, EstadoSolicitud estado) {
+	public Solicitud(Long id, Cliente cliente, String descripcion, EstadoSolicitud estado) {
 		this.id = id;
+		this.cliente = cliente;
 		this.descripcion = descripcion;
 		this.estado = estado;
 		this.fechaCreacion = new Date();
@@ -24,8 +27,8 @@ public class Solicitud {
 		return id;
 	}
 	
-	public void setId(Long id) {
-		this.id = id;
+	public Cliente getCliente() {
+		return cliente;
 	}
 	
 	public String getDescripcion() {
@@ -40,24 +43,16 @@ public class Solicitud {
 		return estado;
 	}
 	
-	public void setEstado(EstadoSolicitud estado) {
-		this.estado = estado;
-	}
-	
 	public Date getFechaCreacion() {
 		return fechaCreacion;
-	}
-	
-	public void setFechaCreacion(Date fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
 	}
 	
 	public Date getFechaCierre() {
 		return fechaCierre;
 	}
 	
-	public void setFechaCierre(Date fechaCierre) {
-		this.fechaCierre = fechaCierre;
+	public Tecnico getTecnicoAsignado() {
+		return tecnicoAsignado;
 	}
 	
 	public void cerrar() {
@@ -66,6 +61,16 @@ public class Solicitud {
 		}
 		estado = EstadoSolicitud.CERRADA;
 		fechaCierre = new Date();
+	}
+	
+	public void asignarTecnico(Tecnico tecnico) {
+		if (tecnico == null) {
+			throw new IllegalArgumentException("El técnico no puede ser null");
+		}
+		if (!tecnico.esActivo()) {
+			throw new IllegalStateException("Sólo se puede asignar un técnico");
+		}
+		this.tecnicoAsignado = tecnico;
 	}
 
 }
