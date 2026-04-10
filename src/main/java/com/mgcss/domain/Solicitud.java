@@ -15,6 +15,10 @@ public class Solicitud {
 	public Solicitud() {}
 	
 	public Solicitud(Long id, Cliente cliente, String descripcion, EstadoSolicitud estado) {
+		if (descripcion == null || descripcion.isEmpty()) {
+            throw new IllegalArgumentException("La descripción es obligatoria");
+        }
+		
 		this.id = id;
 		this.cliente = cliente;
 		this.descripcion = descripcion;
@@ -69,6 +73,9 @@ public class Solicitud {
 		}
 		if (!tecnico.esActivo()) {
 			throw new IllegalStateException("Sólo se puede asignar un técnico");
+		}
+		if (estado == EstadoSolicitud.CERRADA) {
+			throw new IllegalStateException("No se puede asignar un técnico a una solicitud cerrada");
 		}
 		this.tecnicoAsignado = tecnico;
 	}
